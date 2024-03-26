@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
+import * as pbi from 'powerbi-client';
 
 @Component({
   selector: 'app-patio-map',
@@ -26,6 +27,7 @@ export class PatioMapModule implements OnInit {
 
     // Add rectangles to the map
     this.addRectangles();
+    this.embedPowerBIReport();
   }
 
   addRectangles(): void {
@@ -76,4 +78,28 @@ export class PatioMapModule implements OnInit {
     }
   }
 
+  embedPowerBIReport() {
+    const embedConfig: pbi.IEmbedConfiguration = {
+      type: 'report',
+      id: '0961da10-712e-4c2c-afa8-5efe87ddae3f',
+      embedUrl: 'https://app.powerbi.com/reportEmbed?reportId=0961da10-712e-4c2c-afa8-5efe87ddae3f&autoAuth=true&ctid=7a9693b4-2525-4115-af82-a927c7b356f3',
+      tokenType: pbi.models.TokenType.Embed,
+      accessToken: 'your-access-token',
+      permissions: pbi.models.Permissions.All,
+      settings: {
+        filterPaneEnabled: true,
+        navContentPaneEnabled: true,
+      },
+    };
+    const reportContainer = document.getElementById('report-container') as HTMLElement;
+    const powerbi = new pbi.service.Service(
+      pbi.factories.hpmFactory,
+      pbi.factories.wpmpFactory,
+      pbi.factories.routerFactory
+    );
+
+
+    // Use the 'embed' method from the Power BI service instance
+    const report = powerbi.embed(reportContainer, embedConfig);
+  }
 }
