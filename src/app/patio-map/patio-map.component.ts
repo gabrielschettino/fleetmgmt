@@ -18,7 +18,7 @@ export class PatioMapModule implements OnInit {
     this.map = L.map('map', {
       crs: L.CRS.Simple,
       minZoom: -3,
-      maxZoom: -1
+      maxZoom: 0
     });
 
     var bounds: [number, number][] = [[0, 0], [1000, 1000]];
